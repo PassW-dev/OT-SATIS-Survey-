@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แบบประเมินความพึงพอใจงานกิจกรรมบำบัด</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Prompt -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body { font-family: 'Prompt', sans-serif; }
+    .custom-scroll::-webkit-scrollbar { width: 5px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 py-8 px-4 sm:px-6 lg:px-8">
+
+  <div class="max-w-3xl mx-auto space-y-6">
+
+    <!-- Header Card -->
+    <div class="bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 rounded-3xl p-6 sm:p-8 text-white shadow-lg text-center relative overflow-hidden">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md mb-4 border border-white/20">
+        <i data-lucide="file-check-2" class="w-8 h-8 text-amber-300"></i>
+      </div>
+      <h1 class="text-xl sm:text-2xl font-bold mb-2">แบบประเมินความพึงพอใจงานกิจกรรมบำบัด</h1>
+      <p class="text-blue-100 text-xs sm:text-sm max-w-xl mx-auto font-light">
+        กรุณาตอบแบบประเมินตามความเป็นจริง เพื่อนำผลไปพัฒนาคุณภาพการบริการ เมื่อส่งแบบประเมินเรียบร้อยแล้ว ท่านจะได้รับลิงก์เข้าถึงเอกสารใบความรู้ทันที
+      </p>
+    </div>
+
+    <!-- ส่วนที่ 1: แบบฟอร์มกรอกข้อมูล -->
+    <div id="formSection" class="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-6 sm:p-8">
+      <form id="evaluationForm" onsubmit="handleFormSubmit(event)" class="space-y-8">
+        
+        <!-- หมวดที่ 1: ข้อมูลทั่วไป -->
+        <div class="space-y-5 pb-6 border-b border-slate-100">
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">1</span>
+            ข้อมูลทั่วไปของผู้ประเมิน
+          </h2>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <!-- 1. ความสัมพันธ์กับผู้รับบริการ -->
+            <div class="sm:col-span-2 relative">
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                <i data-lucide="users" class="w-3.5 h-3.5 text-blue-600"></i>
+                ความสัมพันธ์กับผู้รับบริการ <span class="text-red-500">*</span>
+              </label>
+              <input type="hidden" id="relationship" required>
+              <button type="button" onclick="toggleDropdown('dropdown-rel')" id="btn-relationship" class="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100/80 border border-slate-200/90 rounded-2xl flex items-center justify-between text-sm transition focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-400">
+                <span class="truncate">-- เลือกความสัมพันธ์ --</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200" id="icon-dropdown-rel"></i>
+              </button>
+              
+              <div id="dropdown-rel" class="hidden absolute left-0 right-0 top-[calc(100%+6px)] bg-white border border-slate-200 rounded-2xl shadow-xl z-30 p-1.5 space-y-1 max-h-60 overflow-y-auto custom-scroll">
+                <div onclick="selectOption('relationship', 'ตัวผู้รับบริการ', 'dropdown-rel')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">ตัวผู้รับบริการ</div>
+                <div onclick="selectOption('relationship', 'บิดา มารดา', 'dropdown-rel')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">บิดา มารดา</div>
+                <div onclick="selectOption('relationship', 'ญาติ เช่น ปู่ ย่า ตา ยาย เป็นต้น', 'dropdown-rel')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">ญาติ เช่น ปู่ ย่า ตา ยาย เป็นต้น</div>
+                <div onclick="selectOption('relationship', 'ผู้ดูแลที่ไม่ใช่ญาติโดยตรง เช่น แม่นม พี่เลี้ยง เป็นต้น', 'dropdown-rel')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">ผู้ดูแลที่ไม่ใช่ญาติโดยตรง เช่น แม่นม พี่เลี้ยง เป็นต้น</div>
+                <div onclick="selectOption('relationship', 'เจ้าพนักงาน/องค์กรเอกชน/อปท.', 'dropdown-rel')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">เจ้าพนักงาน/องค์กรเอกชน/อปท.</div>
+              </div>
+            </div>
+
+            <!-- 2. เพศ -->
+            <div class="relative">
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                <i data-lucide="user" class="w-3.5 h-3.5 text-blue-600"></i>
+                เพศ <span class="text-red-500">*</span>
+              </label>
+              <input type="hidden" id="gender" required>
+              <button type="button" onclick="toggleDropdown('dropdown-gender')" id="btn-gender" class="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100/80 border border-slate-200/90 rounded-2xl flex items-center justify-between text-sm transition focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-400">
+                <span class="truncate">-- เลือกเพศ --</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200" id="icon-dropdown-gender"></i>
+              </button>
+              
+              <div id="dropdown-gender" class="hidden absolute left-0 right-0 top-[calc(100%+6px)] bg-white border border-slate-200 rounded-2xl shadow-xl z-30 p-1.5 space-y-1">
+                <div onclick="selectOption('gender', 'ชาย', 'dropdown-gender')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">ชาย</div>
+                <div onclick="selectOption('gender', 'หญิง', 'dropdown-gender')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">หญิง</div>
+                <div onclick="selectOption('gender', 'เพศทางเลือก', 'dropdown-gender')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">เพศทางเลือก</div>
+                <div onclick="selectOption('gender', 'ไม่ระบุ', 'dropdown-gender')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">ไม่ระบุ</div>
+              </div>
+            </div>
+
+            <!-- 3. อายุ -->
+            <div class="relative">
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-blue-600"></i>
+                อายุ <span class="text-red-500">*</span>
+              </label>
+              <input type="hidden" id="age" required>
+              <button type="button" onclick="toggleDropdown('dropdown-age')" id="btn-age" class="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100/80 border border-slate-200/90 rounded-2xl flex items-center justify-between text-sm transition focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-400">
+                <span class="truncate">-- เลือกช่วงอายุ --</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200" id="icon-dropdown-age"></i>
+              </button>
+              
+              <div id="dropdown-age" class="hidden absolute left-0 right-0 top-[calc(100%+6px)] bg-white border border-slate-200 rounded-2xl shadow-xl z-30 p-1.5 space-y-1">
+                <div onclick="selectOption('age', 'ต่ำกว่า 18 ปี', 'dropdown-age')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">ต่ำกว่า 18 ปี</div>
+                <div onclick="selectOption('age', '18-25 ปี', 'dropdown-age')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">18-25 ปี</div>
+                <div onclick="selectOption('age', '26-35 ปี', 'dropdown-age')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">26-35 ปี</div>
+                <div onclick="selectOption('age', '36-60 ปี', 'dropdown-age')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">36-60 ปี</div>
+                <div onclick="selectOption('age', '60 ปีขึ้นไป', 'dropdown-age')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">60 ปีขึ้นไป</div>
+              </div>
+            </div>
+
+            <!-- 4. ระดับการศึกษาสูงสุด -->
+            <div class="sm:col-span-2 relative">
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-blue-600"></i>
+                ระดับการศึกษาสูงสุด <span class="text-red-500">*</span>
+              </label>
+              <input type="hidden" id="education" required>
+              <button type="button" onclick="toggleDropdown('dropdown-edu')" id="btn-education" class="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100/80 border border-slate-200/90 rounded-2xl flex items-center justify-between text-sm transition focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-400">
+                <span class="truncate">-- เลือกระดับการศึกษา --</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200" id="icon-dropdown-edu"></i>
+              </button>
+              
+              <div id="dropdown-edu" class="hidden absolute left-0 right-0 top-[calc(100%+6px)] bg-white border border-slate-200 rounded-2xl shadow-xl z-30 p-1.5 space-y-1 max-h-60 overflow-y-auto custom-scroll">
+                <div onclick="selectOption('education', 'ต่ำกว่าประถมศึกษา', 'dropdown-edu')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">ต่ำกว่าประถมศึกษา</div>
+                <div onclick="selectOption('education', 'ประถม มัธยมศึกษา หรือเทียบเท่า', 'dropdown-edu')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">ประถม มัธยมศึกษา หรือเทียบเท่า</div>
+                <div onclick="selectOption('education', 'อนุปริญญา ปวส. หรือเทียบเท่า', 'dropdown-edu')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">อนุปริญญา ปวส. หรือเทียบเท่า</div>
+                <div onclick="selectOption('education', 'ปริญญาตรี หรือเทียบเท่า', 'dropdown-edu')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">ปริญญาตรี หรือเทียบเท่า</div>
+                <div onclick="selectOption('education', 'สูงกว่าปริญญาตรีขึ้นไป', 'dropdown-edu')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">สูงกว่าปริญญาตรีขึ้นไป</div>
+              </div>
+            </div>
+
+            <!-- 5. ระยะเวลาที่มารับบริการ -->
+            <div class="sm:col-span-2 relative">
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-blue-600"></i>
+                ระยะเวลาที่มารับบริการในสถานพยาบาลนี้ <span class="text-red-500">*</span>
+              </label>
+              <input type="hidden" id="serviceDuration" required>
+              <button type="button" onclick="toggleDropdown('dropdown-dur')" id="btn-serviceDuration" class="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100/80 border border-slate-200/90 rounded-2xl flex items-center justify-between text-sm transition focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-400">
+                <span class="truncate">-- เลือกระยะเวลา --</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200" id="icon-dropdown-dur"></i>
+              </button>
+              
+              <div id="dropdown-dur" class="hidden absolute left-0 right-0 top-[calc(100%+6px)] bg-white border border-slate-200 rounded-2xl shadow-xl z-30 p-1.5 space-y-1 max-h-60 overflow-y-auto custom-scroll">
+                <div onclick="selectOption('serviceDuration', 'น้อยกว่า 15 วัน', 'dropdown-dur')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">น้อยกว่า 15 วัน</div>
+                <div onclick="selectOption('serviceDuration', '15-30 วัน', 'dropdown-dur')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">15-30 วัน</div>
+                <div onclick="selectOption('serviceDuration', '1-3 เดือน', 'dropdown-dur')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">1-3 เดือน</div>
+                <div onclick="selectOption('serviceDuration', '3-6 เดือน', 'dropdown-dur')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">3-6 เดือน</div>
+                <div onclick="selectOption('serviceDuration', '6-12 เดือน', 'dropdown-dur')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">6-12 เดือน</div>
+                <div onclick="selectOption('serviceDuration', '1 ปีขึ้นไป', 'dropdown-dur')" class="px-3.5 py-2.5 rounded-xl text-xs sm:text-sm hover:bg-blue-50 hover:text-blue-700 cursor-pointer transition">1 ปีขึ้นไป</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- หมวดที่ 2: ข้อคำถาม 13 ข้อ -->
+        <div class="space-y-4 pb-6 border-b border-slate-100">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+              <span class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">2</span>
+              ข้อคำถามความพึงพอใจ
+            </h2>
+            <div class="text-[11px] text-slate-500 bg-slate-100 px-3 py-1 rounded-full w-fit">
+              4 = มากที่สุด | 3 = มาก | 2 = น้อย | 1 = น้อยที่สุด
+            </div>
+          </div>
+
+          <div id="questionsContainer" class="space-y-4"></div>
+        </div>
+
+        <!-- หมวดที่ 3: คำแนะนำเพิ่มเติม -->
+        <div class="space-y-4">
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">3</span>
+            คำแนะนำและข้อเสนอแนะเพิ่มเติม
+          </h2>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">ท่านคิดว่าสิ่งที่งานกิจกรรมบำบัดให้บริการที่ดีคือ</label>
+            <textarea id="goodService" rows="2" placeholder="ระบุสิ่งที่ประทับใจหรือการบริการที่ดี..." class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition text-sm bg-slate-50/50"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">ท่านคิดว่าสิ่งที่งานกิจกรรมบำบัดควรปรับปรุงคือ</label>
+            <textarea id="improvement" rows="2" placeholder="ระบุสิ่งที่ควรพัฒนาหรือปรับปรุงเพิ่มเติม..." class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition text-sm bg-slate-50/50"></textarea>
+          </div>
+        </div>
+
+        <!-- ปุ่มส่งข้อมูล -->
+        <button type="submit" id="submitBtn" class="w-full py-4 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-2xl shadow-lg shadow-blue-600/25 transition flex items-center justify-center gap-2 cursor-pointer text-base">
+          <span>ส่งแบบประเมินและรับเอกสารความรู้</span>
+          <i data-lucide="arrow-right" class="w-5 h-5"></i>
+        </button>
+      </form>
+    </div>
+
+    <!-- ส่วนที่ 2: หน้าดาวน์โหลดสำเร็จ -->
+    <div id="successSection" class="hidden bg-white rounded-3xl p-8 sm:p-12 border border-emerald-200 shadow-xl text-center space-y-6">
+      <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto ring-8 ring-emerald-50">
+        <i data-lucide="check-check" class="w-10 h-10"></i>
+      </div>
+
+      <div class="max-w-md mx-auto">
+        <span class="inline-block px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold uppercase mb-2 border border-emerald-200">
+          บันทึกข้อมูลเรียบร้อยแล้ว
+        </span>
+        <h3 class="text-2xl font-bold text-slate-900 mb-2">ขอบพระคุณสำหรับความคิดเห็น</h3>
+        <p class="text-slate-600 text-sm">
+          ท่านสามารถคลิกปุ่มด้านล่าง เพื่อเข้าสู่โฟลเดอร์ Google Drive และดาวน์โหลดเอกสารใบความรู้ได้ทันทีครับ
+        </p>
+      </div>
+
+      <div class="pt-2">
+        <a id="driveDownloadBtn" href="https://drive.google.com/drive/folders/1gMHqTC36ff8kvRDqSoXEIm4Fi6HRxdeX?usp=drive_link" target="_blank" class="inline-flex items-center justify-center gap-2 py-4 px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-2xl shadow-lg shadow-emerald-600/20 transition text-base">
+          <i data-lucide="folder-down" class="w-5 h-5"></i>
+          <span>เข้าสู่โฟลเดอร์ดาวน์โหลดเอกสาร (Google Drive)</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- โค้ด JavaScript สำหรับ GitHub Pages + SheetDB -->
+  <script>
+    const SHEETDB_API_URL = "https://sheetdb.io/api/v1/4fpb4y7jw5exm";
+    const DRIVE_URL = "https://drive.google.com/drive/folders/1gMHqTC36ff8kvRDqSoXEIm4Fi6HRxdeX?usp=drive_link";
+
+    function toggleDropdown(menuId) {
+      const menu = document.getElementById(menuId);
+      const isOpen = !menu.classList.contains('hidden');
+      
+      document.querySelectorAll('[id^="dropdown-"]').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('[id^="icon-dropdown-"]').forEach(el => el.classList.remove('rotate-180'));
+
+      if (!isOpen) {
+        menu.classList.remove('hidden');
+        document.getElementById('icon-' + menuId)?.classList.add('rotate-180');
+      }
+    }
+
+    function selectOption(fieldId, value, menuId) {
+      document.getElementById(fieldId).value = value;
+      const btn = document.getElementById('btn-' + fieldId);
+      btn.querySelector('span').textContent = value;
+      btn.classList.remove('text-slate-400');
+      btn.classList.add('text-slate-900', 'font-medium', 'border-blue-500', 'bg-blue-50/20');
+      
+      toggleDropdown(menuId);
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.relative')) {
+        document.querySelectorAll('[id^="dropdown-"]').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('[id^="icon-dropdown-"]').forEach(el => el.classList.remove('rotate-180'));
+      }
+    });
+
+    const questions = [
+      "1. บุคลากรออกให้บริการตรงเวลา",
+      "2. บุคลากรให้บริการตามเวลา",
+      "3. บุคลากรให้การนัดบริการต่อเนื่อง",
+      "4. บุคลากรให้บริการด้วยความสุภาพ เต็มใจ ซื่อสัตย์ และไม่เลือกปฏิบัติ",
+      "5. บุคลากรรับฟังปัญหา ประเมินปัญหา และวางแผนการฟื้นฟูได้ตรงกับปัญหา",
+      "6. บุคลากรใส่ใจ ให้การติดตามผลการฝึกจากที่บ้าน",
+      "7. บุคลากรให้คำอธิบายและตอบคำถามได้ชัดเจนตามความต้องการ",
+      "8. บุคลากรให้ข้อมูลความรู้ที่เกี่ยวข้องกับการดูแลต่อเนื่องที่บ้าน ที่เข้าใจง่ายและเป็นประโยชน์",
+      "9. ท่านมีความรู้ความเข้าใจเรื่องโรคและสามารถดูแลบุตรหลานได้",
+      "10. ท่านมั่นใจมากขึ้นว่าจะสามารถรับมือกับอารมณ์หรือพฤติกรรมของบุตรหลานได้",
+      "11. ท่านรู้ว่าจะจัดการอย่างไร เมื่อบุตรหลานมีปัญหาทางอารมณ์ หรือพฤติกรรม",
+      "12. ท่านได้รับประโยชน์ และสามารถนำความรู้จากคู่มือนำกลับไปฝึกกระตุ้นบุตรหลานต่อเนื่องที่บ้านได้",
+      "13. ท่านมั่นใจในการนำสื่อ/คำแนะนำไปฝึกต่อเนื่องที่บ้าน"
+    ];
+
+    const ratingOptions = [
+      { score: 4, label: "มากที่สุด" },
+      { score: 3, label: "มาก" },
+      { score: 2, label: "น้อย" },
+      { score: 1, label: "น้อยที่สุด" }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('questionsContainer');
+      container.innerHTML = questions.map((q, idx) => {
+        const qNum = idx + 1;
+        return `
+          <div class="bg-slate-50/90 p-4 sm:p-5 rounded-2xl border border-slate-200/80">
+            <p class="text-sm sm:text-base font-semibold text-slate-800 mb-3 leading-snug">${q} <span class="text-red-500">*</span></p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              ${ratingOptions.map(opt => `
+                <label class="flex flex-col items-center justify-center py-3 px-2 rounded-2xl border border-slate-200/90 bg-white hover:border-blue-400 hover:bg-blue-50/30 cursor-pointer transition select-none has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50/80 has-[:checked]:ring-1 has-[:checked]:ring-blue-600 shadow-sm">
+                  <input type="radio" name="q${qNum}" value="${opt.score}" required class="w-4 h-4 text-blue-600 focus:ring-blue-500 mb-1.5 accent-blue-600">
+                  <span class="text-xs sm:text-sm font-semibold text-slate-800">${opt.label}</span>
+                  <span class="text-[11px] sm:text-xs text-slate-500 mt-0.5">(${opt.score})</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      lucide.createIcons();
+
+      // Pop-up แจ้งเตือนเริ่มต้น
+      Swal.fire({
+        html: `
+          <div style="font-size: 15px; line-height: 1.8; color: #1e293b; font-weight: 500; text-align: center; padding: 8px 4px 4px 4px;">
+            รบกวนร่วมแบ่งปันความรู้สึกที่รับบริการกิจกรรมบำบัดผ่านแบบประเมินสั้น ๆ ก่อนรับเอกสารความรู้กลับไปฝึกต่อเนื่องที่บ้านค่ะ
+          </div>
+        `,
+        icon: 'info',
+        iconColor: '#3b82f6',
+        confirmButtonText: 'เริ่มทำแบบประเมิน 😊',
+        confirmButtonColor: '#2563eb',
+        allowOutsideClick: false,
+        backdrop: `rgba(15, 23, 42, 0.45)`,
+        customClass: {
+          popup: 'rounded-3xl shadow-2xl p-6',
+          confirmButton: 'rounded-xl px-6 py-3 font-medium text-sm'
+        }
+      });
+    });
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+
+      const fields = [
+        { id: 'relationship', label: 'ความสัมพันธ์กับผู้รับบริการ' },
+        { id: 'gender', label: 'เพศ' },
+        { id: 'age', label: 'อายุ' },
+        { id: 'education', label: 'ระดับการศึกษาสูงสุด' },
+        { id: 'serviceDuration', label: 'ระยะเวลาที่มารับบริการ' }
+      ];
+
+      for (const f of fields) {
+        if (!document.getElementById(f.id).value) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+            text: `ท่านยังไม่ได้ระบุ: ${f.label}`,
+            confirmButtonColor: '#2563eb',
+            confirmButtonText: 'ตกลง'
+          }).then(() => {
+            document.getElementById('btn-' + f.id).scrollIntoView({ behavior: 'smooth', block: 'center' });
+          });
+          return;
+        }
+      }
+
+      Swal.fire({
+        title: 'กำลังบันทึกแบบประเมิน...',
+        text: 'ระบบกำลังนำข้อมูลลง Google Sheet และจัดเตรียมเอกสาร',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      const now = new Date();
+      const timestamp = now.toLocaleDateString('th-TH') + ' ' + now.toLocaleTimeString('th-TH');
+
+      const payload = {
+        "Timestamp": timestamp,
+        "ความสัมพันธ์": document.getElementById('relationship').value,
+        "เพศ": document.getElementById('gender').value,
+        "อายุ": document.getElementById('age').value,
+        "ระดับการศึกษา": document.getElementById('education').value,
+        "ระยะเวลาที่รับบริการ": document.getElementById('serviceDuration').value,
+        "สิ่งที่ให้บริการดี": document.getElementById('goodService').value.trim() || "-",
+        "สิ่งที่ควรปรับปรุง": document.getElementById('improvement').value.trim() || "-"
+      };
+
+      for (let i = 1; i <= 13; i++) {
+        payload[`ข้อ${i}`] = document.querySelector(`input[name="q${i}"]:checked`)?.value;
+      }
+
+      try {
+        const response = await fetch(SHEETDB_API_URL, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ data: [payload] })
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.created) {
+          document.getElementById('formSection').classList.add('hidden');
+          const successSection = document.getElementById('successSection');
+          successSection.classList.remove('hidden');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          lucide.createIcons();
+
+          Swal.fire({
+            icon: 'success',
+            title: 'ประเมินเรียบร้อยแล้ว!',
+            text: 'ขอบพระคุณสำหรับความคิดเห็น ท่านสามารถกดปุ่มด้านล่างเพื่อรับเอกสารได้ทันที',
+            confirmButtonColor: '#059669',
+            confirmButtonText: '📂 ดาวน์โหลดเอกสารจาก Drive ทันที',
+            showCancelButton: true,
+            cancelButtonText: 'ดูหน้ารายละเอียด',
+            cancelButtonColor: '#64748b'
+          }).then((res) => {
+            if (res.isConfirmed) {
+              window.open(DRIVE_URL, '_blank');
+            }
+          });
+        } else {
+          throw new Error('บันทึกข้อมูลไม่สำเร็จ');
+        }
+      } catch (err) {
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาด',
+          text: 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาลองใหม่อีกครั้ง',
+          confirmButtonColor: '#dc2626'
+        });
+      }
+    }
+  </script>
+</body>
+</html>

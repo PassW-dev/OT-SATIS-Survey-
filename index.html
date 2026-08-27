@@ -197,7 +197,7 @@
       </form>
     </div>
 
-    <!-- ส่วนที่ 2: หน้าดาวน์โหลดสำเร็จ -->
+    <!-- ส่วนที่ 2: หน้าดาวน์โหลดสำเร็จ (แสดงผลทันทีหลังส่งข้อมูลสำเร็จ) -->
     <div id="successSection" class="hidden bg-white rounded-3xl p-8 sm:p-12 border border-emerald-200 shadow-xl text-center space-y-6">
       <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto ring-8 ring-emerald-50">
         <i data-lucide="check-check" class="w-10 h-10"></i>
@@ -214,7 +214,7 @@
       </div>
 
       <div class="pt-2">
-        <a id="driveDownloadBtn" href="https://drive.google.com/drive/folders/1gMHqTC36ff8kvRDqSoXEIm4Fi6HRxdeX?usp=drive_link" target="_blank" class="inline-flex items-center justify-center gap-2 py-4 px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-2xl shadow-lg shadow-emerald-600/20 transition text-base">
+        <a id="driveDownloadBtn" href="https://drive.google.com/drive/folders/1fJhynBl_PYm1D-fddDSZI9LHDr5tMVU_?usp=sharing" target="_blank" class="inline-flex items-center justify-center gap-2 py-4 px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-2xl shadow-lg shadow-emerald-600/20 transition text-base">
           <i data-lucide="folder-down" class="w-5 h-5"></i>
           <span>เข้าสู่โฟลเดอร์ดาวน์โหลดเอกสาร (Google Drive)</span>
         </a>
@@ -223,7 +223,7 @@
 
   </div>
 
-  <!-- โค้ด JavaScript สำหรับ GitHub Pages + SheetDB -->
+  <!-- โค้ด JavaScript -->
   <script>
     const SHEETDB_API_URL = "https://sheetdb.io/api/v1/4fpb4y7jw5exm";
     const DRIVE_URL = "https://drive.google.com/drive/folders/1fJhynBl_PYm1D-fddDSZI9LHDr5tMVU_?usp=sharing";
@@ -390,26 +390,16 @@
         const result = await response.json();
 
         if (response.ok && result.created) {
+          // ปิดหน้าต่าง Loading ของ SweetAlert2 ทันที
+          Swal.close();
+
+          // ซ่อนฟอร์มและเปิดหน้าดาวน์โหลดเอกสาร
           document.getElementById('formSection').classList.add('hidden');
           const successSection = document.getElementById('successSection');
           successSection.classList.remove('hidden');
+          document.getElementById('driveDownloadBtn').href = DRIVE_URL;
           window.scrollTo({ top: 0, behavior: 'smooth' });
           lucide.createIcons();
-
-          Swal.fire({
-            icon: 'success',
-            title: 'ประเมินเรียบร้อยแล้ว!',
-            text: 'ขอบพระคุณสำหรับความคิดเห็น ท่านสามารถกดปุ่มด้านล่างเพื่อรับเอกสารได้ทันที',
-            confirmButtonColor: '#059669',
-            confirmButtonText: '📂 ดาวน์โหลดเอกสารจาก Drive ทันที',
-            showCancelButton: true,
-            cancelButtonText: 'ดูหน้ารายละเอียด',
-            cancelButtonColor: '#64748b'
-          }).then((res) => {
-            if (res.isConfirmed) {
-              window.open(DRIVE_URL, '_blank');
-            }
-          });
         } else {
           throw new Error('บันทึกข้อมูลไม่สำเร็จ');
         }
